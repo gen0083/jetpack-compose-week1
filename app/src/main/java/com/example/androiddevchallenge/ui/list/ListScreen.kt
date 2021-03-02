@@ -10,7 +10,7 @@ fun ListScreen() {
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showSystemUi = true)
 fun ListScreenPreview() {
     ListScreen()
 }

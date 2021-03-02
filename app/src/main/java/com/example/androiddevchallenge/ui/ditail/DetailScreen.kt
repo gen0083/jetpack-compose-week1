@@ -17,7 +17,7 @@ fun DetailScreen(pet: Pets, modifier: Modifier = Modifier) {
 }
 
 @Composable
-@Preview(widthDp = 360, heightDp = 600, showBackground = true)
+@Preview(showSystemUi = true)
 fun DetailScreenPreview() {
     DetailScreen(pet = Pets("test", "test", "test"))
 }
