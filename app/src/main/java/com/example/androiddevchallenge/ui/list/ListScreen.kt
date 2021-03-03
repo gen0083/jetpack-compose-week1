@@ -2,6 +2,7 @@ package com.example.androiddevchallenge.ui.list
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,10 +29,10 @@ import com.example.androiddevchallenge.data.Pets
 import com.example.androiddevchallenge.data.generateRandomPets
 
 @Composable
-fun ListScreen(pets: List<Pets>) {
+fun ListScreen(pets: List<Pets>, onItemSelected: (Pets) -> Unit) {
     LazyColumn {
         items(pets) { pet ->
-            PetsItem(pet = pet)
+            PetsItem(pet = pet, onItemSelected = onItemSelected)
             Divider(color = Color.Black)
         }
     }
@@ -41,13 +42,15 @@ fun ListScreen(pets: List<Pets>) {
 @Preview(showSystemUi = true)
 fun ListScreenPreview() {
     val pets = List(3) { generateRandomPets() }
-    ListScreen(pets)
+    ListScreen(pets) {}
 }
 
 @Composable
-fun PetsItem(pet: Pets) {
+fun PetsItem(pet: Pets, onItemSelected: (Pets) -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth(1f),
+        modifier = Modifier
+            .fillMaxWidth(1f)
+            .clickable { onItemSelected(pet) },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
@@ -73,5 +76,5 @@ fun PetsItem(pet: Pets) {
 @Preview
 fun PetsItemPreview() {
     val pet = generateRandomPets()
-    PetsItem(pet = pet)
+    PetsItem(pet = pet) {}
 }
