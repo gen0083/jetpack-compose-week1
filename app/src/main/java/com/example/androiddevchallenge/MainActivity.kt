@@ -16,6 +16,7 @@
 package com.example.androiddevchallenge
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyTheme {
-                MyApp(viewModel)
+                MyApp(viewModel, this.onBackPressedDispatcher)
             }
         }
     }
@@ -44,14 +45,18 @@ class MainActivity : AppCompatActivity() {
 
 // Start building your app here!
 @Composable
-fun MyApp(viewModel: MainViewModel) {
+fun MyApp(viewModel: MainViewModel, onBackPressedDispatcher: OnBackPressedDispatcher) {
     Surface(color = MaterialTheme.colors.background) {
         when (viewModel.screenState) {
             is SelectedScreen.ListScreen   ->
                 ListScreen(pets = viewModel.petsList,
                     onItemSelected = viewModel::onItemSelect)
             is SelectedScreen.DetailScreen ->
-                DetailScreen(pet = (viewModel.screenState as SelectedScreen.DetailScreen).selected)
+                DetailScreen(
+                    pet = (viewModel.screenState as SelectedScreen.DetailScreen).selected,
+                    onBackPressedDispatcher,
+                    viewModel::onBackPress
+                )
         }
     }
 }
@@ -61,7 +66,7 @@ fun MyApp(viewModel: MainViewModel) {
 fun LightPreview() {
     val vm = MainViewModel()
     MyTheme {
-        MyApp(vm)
+        MyApp(vm, OnBackPressedDispatcher())
     }
 }
 
@@ -70,7 +75,7 @@ fun LightPreview() {
 fun DarkPreview() {
     val vm = MainViewModel()
     MyTheme(darkTheme = true) {
-        MyApp(vm)
+        MyApp(vm, OnBackPressedDispatcher())
     }
 }
 
