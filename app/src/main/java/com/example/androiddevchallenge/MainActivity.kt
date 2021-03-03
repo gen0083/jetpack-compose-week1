@@ -21,20 +21,22 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.androiddevchallenge.data.Pets
+import com.example.androiddevchallenge.ui.ditail.DetailScreen
+import com.example.androiddevchallenge.ui.list.ListScreen
 import com.example.androiddevchallenge.ui.theme.MyTheme
 
 class MainActivity : AppCompatActivity() {
     
     val viewModel by viewModels<MainViewModel>()
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyTheme {
-                MyApp()
+                MyApp(viewModel)
             }
         }
     }
@@ -42,25 +44,33 @@ class MainActivity : AppCompatActivity() {
 
 // Start building your app here!
 @Composable
-fun MyApp() {
+fun MyApp(viewModel: MainViewModel) {
     Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+        when (viewModel.screenState) {
+            is SelectedScreen.ListScreen   ->
+                ListScreen(pets = viewModel.petsList,
+                    onItemSelected = viewModel::onItemSelect)
+            is SelectedScreen.DetailScreen ->
+                DetailScreen(pet = (viewModel.screenState as SelectedScreen.DetailScreen).selected)
+        }
     }
 }
 
 @Preview("Light Theme", widthDp = 360, heightDp = 640)
 @Composable
 fun LightPreview() {
+    val vm = MainViewModel()
     MyTheme {
-        MyApp()
+        MyApp(vm)
     }
 }
 
 @Preview("Dark Theme", widthDp = 360, heightDp = 640)
 @Composable
 fun DarkPreview() {
+    val vm = MainViewModel()
     MyTheme(darkTheme = true) {
-        MyApp()
+        MyApp(vm)
     }
 }
 
