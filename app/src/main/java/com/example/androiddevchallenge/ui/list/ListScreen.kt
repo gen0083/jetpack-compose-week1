@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -25,14 +28,20 @@ import com.example.androiddevchallenge.data.Pets
 import com.example.androiddevchallenge.data.generateRandomPets
 
 @Composable
-fun ListScreen() {
-    Text("list screen")
+fun ListScreen(pets: List<Pets>) {
+    LazyColumn {
+        items(pets) { pet ->
+            PetsItem(pet = pet)
+            Divider(color = Color.Black)
+        }
+    }
 }
 
 @Composable
 @Preview(showSystemUi = true)
 fun ListScreenPreview() {
-    ListScreen()
+    val pets = List(3) { generateRandomPets() }
+    ListScreen(pets)
 }
 
 @Composable
@@ -47,8 +56,8 @@ fun PetsItem(pet: Pets) {
             modifier = Modifier
                 .padding(8.dp)
                 .size(40.dp)
-                .background(Color.LightGray)
                 .clip(CircleShape)
+                .background(Color.LightGray)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
